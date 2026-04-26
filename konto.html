@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mein Konto – immodays</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='16' height='32' fill='%23c9a24b'/><rect x='16' width='16' height='32' fill='%230b1f4d'/></svg>" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo logo--sm"><span class="logo-immo">immo</span><span class="logo-days">days</span></a>
+    <div class="nav-links">
+      <a href="suchen.html?listing_type=rent">Mieten</a>
+      <a href="suchen.html?listing_type=buy">Kaufen</a>
+      <a href="inserieren.html">Inserieren</a>
+      <a href="konto.html" class="is-active">Konto</a>
+    </div>
+    <div class="nav-actions">
+      <a href="#" class="btn btn-primary btn-sm" data-action="signout">Logout</a>
+    </div>
+    <button class="nav-burger" aria-label="Menü"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+</nav>
+
+<main class="container" style="padding:48px 24px 80px">
+  <div style="display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:36px">
+    <div>
+      <span class="eyebrow">Dashboard</span>
+      <h1 id="hello" style="font-style:italic;font-weight:400">Willkommen, <b style="font-style:normal;font-weight:500">…</b></h1>
+    </div>
+    <a href="inserieren.html" class="btn btn-primary">+ Neues Inserat</a>
+  </div>
+
+  <!-- Tabs -->
+  <div class="search-tabs" style="margin-bottom:30px">
+    <button class="search-tab is-active" data-tab="listings">Meine Inserate</button>
+    <button class="search-tab" data-tab="inquiries">Anfragen</button>
+    <button class="search-tab" data-tab="favorites">Merkliste</button>
+    <button class="search-tab" data-tab="profile">Profil</button>
+  </div>
+
+  <!-- Listings -->
+  <section data-pane="listings">
+    <div id="my-listings" class="cards-grid">
+      <div class="skeleton" style="height:200px"></div>
+      <div class="skeleton" style="height:200px"></div>
+    </div>
+  </section>
+
+  <!-- Inquiries -->
+  <section data-pane="inquiries" hidden>
+    <div id="my-inquiries"></div>
+  </section>
+
+  <!-- Favorites -->
+  <section data-pane="favorites" hidden>
+    <div id="my-favorites" class="cards-grid"></div>
+  </section>
+
+  <!-- Profile -->
+  <section data-pane="profile" hidden>
+    <form id="profile-form" class="form-card" style="max-width:640px">
+      <h3 style="font-family:var(--f-display);margin-bottom:18px">Profil</h3>
+      <div id="profile-msg" style="margin-bottom:14px"></div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Anzeigename</label>
+          <input type="text" name="display_name" />
+        </div>
+        <div class="field">
+          <label>Konto-Typ</label>
+          <select name="account_type">
+            <option value="private">Privatperson</option>
+            <option value="business">Gewerblich</option>
+            <option value="agent">Makler:in</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Firma</label>
+          <input type="text" name="company_name" />
+        </div>
+        <div class="field">
+          <label>Webseite</label>
+          <input type="url" name="website" />
+        </div>
+        <div class="field full">
+          <label>E-Mail (read-only)</label>
+          <input type="email" name="email" disabled />
+        </div>
+      </div>
+      <button class="btn btn-primary" type="submit" style="margin-top:16px">Speichern</button>
+    </form>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border:0;padding:0">
+      <span>© 2026 immodays</span>
+      <span><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="agb.html">AGB</a></span>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/konto.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inserat – immodays</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='16' height='32' fill='%23c9a24b'/><rect x='16' width='16' height='32' fill='%230b1f4d'/></svg>" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo logo--sm"><span class="logo-immo">immo</span><span class="logo-days">days</span></a>
+    <div class="nav-links">
+      <a href="suchen.html?listing_type=rent">Mieten</a>
+      <a href="suchen.html?listing_type=buy">Kaufen</a>
+      <a href="inserieren.html">Inserieren</a>
+    </div>
+    <div class="nav-actions">
+      <a href="anmelden.html" class="btn btn-ghost btn-sm" data-auth="logged-out">Anmelden</a>
+      <a href="registrieren.html" class="btn btn-primary btn-sm" data-auth="logged-out">Registrieren</a>
+      <a href="konto.html" class="btn btn-ghost btn-sm" data-auth="logged-in" style="display:none">Mein Konto</a>
+      <a href="#" class="btn btn-primary btn-sm" data-auth="logged-in" data-action="signout" style="display:none">Logout</a>
+    </div>
+    <button class="nav-burger" aria-label="Menü"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+</nav>
+
+<main class="container" style="padding:32px 24px 80px">
+  <a href="javascript:history.back()" class="btn btn-link" style="margin-bottom:16px">← Zurück zur Suche</a>
+
+  <div id="prop-content">
+    <!-- Skeleton -->
+    <div class="skeleton" style="height:460px;border-radius:18px;margin-bottom:30px"></div>
+    <div class="skeleton" style="height:48px;width:60%;margin-bottom:8px"></div>
+    <div class="skeleton" style="height:24px;width:40%"></div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border:0;padding:0">
+      <span>© 2026 immodays</span>
+      <span><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="agb.html">AGB</a></span>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/inserat.js"></script>
+
+</body>
+</html>

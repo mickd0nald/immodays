@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registrieren – immodays</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='16' height='32' fill='%23c9a24b'/><rect x='16' width='16' height='32' fill='%230b1f4d'/></svg>" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo logo--sm"><span class="logo-immo">immo</span><span class="logo-days">days</span></a>
+    <div class="nav-links"></div>
+    <div class="nav-actions">
+      <a href="anmelden.html" class="btn btn-ghost btn-sm">Anmelden</a>
+    </div>
+  </div>
+</nav>
+
+<div class="auth-wrap">
+  <aside class="auth-aside">
+    <a href="index.html" class="logo logo--sm" style="background:transparent">
+      <span class="logo-immo">immo</span><span class="logo-days">days</span>
+    </a>
+    <div>
+      <h2 style="font-style:italic;font-weight:400">Mehr als ein Portal.</h2>
+      <p class="quote" style="margin-top:30px">„Inserate kostenlos, international und ohne Drittland-Tracking — so sollte es eigentlich überall sein."</p>
+    </div>
+    <p style="font-size:.85rem;color:rgba(255,255,255,.65)">© 2026 immodays</p>
+  </aside>
+
+  <div class="auth-form-wrap">
+    <form class="auth-form" id="register-form">
+      <h1>Konto erstellen</h1>
+      <p class="muted">Kostenlos – keine Vertragsbindung, keine Kreditkarte.</p>
+
+      <div id="auth-msg" style="margin:18px 0"></div>
+
+      <div class="field" style="margin-bottom:14px">
+        <label>Konto-Typ</label>
+        <select name="account_type">
+          <option value="private">Privatperson</option>
+          <option value="business">Gewerblich</option>
+          <option value="agent">Makler:in</option>
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:14px">
+        <label>Anzeigename</label>
+        <input type="text" name="display_name" required />
+      </div>
+      <div class="field" style="margin-bottom:14px" data-business>
+        <label>Firma (optional)</label>
+        <input type="text" name="company_name" />
+      </div>
+      <div class="field" style="margin-bottom:14px">
+        <label>E-Mail</label>
+        <input type="email" name="email" required autocomplete="email" />
+      </div>
+      <div class="field" style="margin-bottom:18px">
+        <label>Passwort (mind. 8 Zeichen)</label>
+        <input type="password" name="password" required minlength="8" autocomplete="new-password" />
+      </div>
+
+      <label style="display:flex;gap:10px;font-size:.85rem;color:var(--c-muted);margin-bottom:14px">
+        <input type="checkbox" name="terms_ok" required />
+        <span>Ich akzeptiere die <a href="agb.html">AGB</a> und die <a href="datenschutz.html">Datenschutzerklärung</a>.</span>
+      </label>
+      <label style="display:flex;gap:10px;font-size:.85rem;color:var(--c-muted);margin-bottom:18px">
+        <input type="checkbox" name="marketing_ok" />
+        <span>Ich möchte gelegentlich Produkt-News per E-Mail erhalten (jederzeit widerrufbar).</span>
+      </label>
+
+      <button class="btn btn-primary btn-block btn-lg" type="submit">Kostenlos registrieren</button>
+
+      <div class="switch">Schon ein Konto? <a href="anmelden.html">Anmelden →</a></div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+  import { supabase } from './js/supabase.js';
+  import { escapeHtml } from './js/main.js';
+
+  document.getElementById('register-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const msg = document.getElementById('auth-msg');
+    msg.innerHTML = '';
+
+    const { data, error } = await supabase.auth.signUp({
+      email:    fd.get('email'),
+      password: fd.get('password'),
+      options: {
+        data: {
+          display_name:  fd.get('display_name'),
+          account_type:  fd.get('account_type'),
+          company_name:  fd.get('company_name') || null,
+          marketing_consent: !!fd.get('marketing_ok'),
+        },
+        emailRedirectTo: window.location.origin + window.location.pathname.replace('registrieren.html', 'anmelden.html'),
+      },
+    });
+
+    if (error) {
+      msg.innerHTML = `<div class="alert alert-error">${escapeHtml(error.message)}</div>`;
+      return;
+    }
+
+    if (data.user && !data.session) {
+      msg.innerHTML = `<div class="alert alert-success">Bitte bestätige die E-Mail, die wir dir gerade gesendet haben.</div>`;
+    } else {
+      window.location.href = 'konto.html';
+    }
+  });
+</script>
+
+</body>
+</html>

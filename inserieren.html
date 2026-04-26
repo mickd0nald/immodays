@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inserieren – immodays</title>
+  <meta name="description" content="Immobilie kostenlos auf immodays inserieren – für Privat, Gewerbe und Makler." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='16' height='32' fill='%23c9a24b'/><rect x='16' width='16' height='32' fill='%230b1f4d'/></svg>" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo logo--sm"><span class="logo-immo">immo</span><span class="logo-days">days</span></a>
+    <div class="nav-links">
+      <a href="suchen.html?listing_type=rent">Mieten</a>
+      <a href="suchen.html?listing_type=buy">Kaufen</a>
+      <a href="inserieren.html" class="is-active">Inserieren</a>
+    </div>
+    <div class="nav-actions">
+      <a href="anmelden.html" class="btn btn-ghost btn-sm" data-auth="logged-out">Anmelden</a>
+      <a href="registrieren.html" class="btn btn-primary btn-sm" data-auth="logged-out">Registrieren</a>
+      <a href="konto.html" class="btn btn-ghost btn-sm" data-auth="logged-in" style="display:none">Mein Konto</a>
+      <a href="#" class="btn btn-primary btn-sm" data-auth="logged-in" data-action="signout" style="display:none">Logout</a>
+    </div>
+    <button class="nav-burger" aria-label="Menü"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+</nav>
+
+<main class="container" style="padding:48px 24px 80px;max-width:920px">
+  <div style="text-align:center;margin-bottom:40px">
+    <span class="eyebrow">100% kostenlos</span>
+    <h1 style="font-style:italic;font-weight:400">Dein <b style="font-style:normal;font-weight:500">Inserat</b> in wenigen Minuten</h1>
+    <p class="muted" style="max-width:520px;margin:0 auto">Privat, gewerblich oder als Makler – auf immodays inserierst du ohne Gebühren.</p>
+  </div>
+
+  <div id="auth-gate" class="form-card" style="text-align:center;display:none">
+    <h2>Bitte zuerst anmelden</h2>
+    <p>Damit du dein Inserat verwalten und Anfragen empfangen kannst, brauchst du ein kostenloses Konto.</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:18px">
+      <a href="anmelden.html?next=inserieren.html" class="btn btn-ghost">Anmelden</a>
+      <a href="registrieren.html?next=inserieren.html" class="btn btn-primary">Konto erstellen</a>
+    </div>
+  </div>
+
+  <form id="listing-form" class="form-card" style="display:none">
+    <div class="step-bar">
+      <span class="step is-active">1. Eckdaten</span>
+      <span class="step">2. Lage</span>
+      <span class="step">3. Beschreibung &amp; Ausstattung</span>
+      <span class="step">4. Fotos</span>
+      <span class="step">5. Veröffentlichen</span>
+    </div>
+
+    <div id="form-msg"></div>
+
+    <!-- 1. Eckdaten -->
+    <section class="form-section">
+      <h3>Eckdaten</h3>
+      <div class="form-grid">
+        <div class="field">
+          <label>Vermarktungsart *</label>
+          <select name="listing_type" required>
+            <option value="rent">Vermieten</option>
+            <option value="buy">Verkaufen</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Objektart *</label>
+          <select name="property_type" required>
+            <option value="apartment">Wohnung</option>
+            <option value="house">Haus</option>
+            <option value="land">Grundstück</option>
+            <option value="commercial">Gewerbe</option>
+            <option value="room">Zimmer / WG</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Titel des Inserats *</label>
+          <input type="text" name="title" required maxlength="120" placeholder="z. B. Helle 3-Zi.-Altbauwohnung mit Balkon" />
+        </div>
+
+        <div class="field">
+          <label>Preis (€) *</label>
+          <input type="number" name="price" min="0" step="50" required />
+        </div>
+        <div class="field">
+          <label>Währung</label>
+          <select name="currency">
+            <option value="EUR">EUR</option>
+            <option value="CHF">CHF</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Wohnfläche (m²)</label>
+          <input type="number" name="living_area" min="0" step="0.1" />
+        </div>
+        <div class="field">
+          <label>Grundstücksfläche (m²)</label>
+          <input type="number" name="plot_area" min="0" step="0.1" />
+        </div>
+
+        <div class="field">
+          <label>Zimmer</label>
+          <input type="number" name="rooms" min="0" step="0.5" />
+        </div>
+        <div class="field">
+          <label>Schlafzimmer</label>
+          <input type="number" name="bedrooms" min="0" />
+        </div>
+
+        <div class="field">
+          <label>Etage</label>
+          <input type="number" name="floor" />
+        </div>
+        <div class="field">
+          <label>Baujahr</label>
+          <input type="number" name="year_built" min="1500" max="2100" />
+        </div>
+
+        <div class="field" data-show-when="rent">
+          <label>Nebenkosten (€)</label>
+          <input type="number" name="additional_costs" min="0" step="10" />
+        </div>
+        <div class="field" data-show-when="rent">
+          <label>Heizkosten (€)</label>
+          <input type="number" name="heating_costs" min="0" step="10" />
+        </div>
+        <div class="field" data-show-when="rent">
+          <label>Kaution (€)</label>
+          <input type="number" name="deposit" min="0" step="50" />
+        </div>
+        <div class="field">
+          <label>Provision</label>
+          <input type="text" name="commission" placeholder="z. B. provisionsfrei" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Lage -->
+    <section class="form-section">
+      <h3>Lage</h3>
+      <div class="form-grid">
+        <div class="field">
+          <label>Land *</label>
+          <select name="country" id="lf-country" required></select>
+        </div>
+        <div class="field">
+          <label>Stadt *</label>
+          <input type="text" name="city" required />
+        </div>
+        <div class="field">
+          <label>PLZ</label>
+          <input type="text" name="postal_code" />
+        </div>
+        <div class="field">
+          <label>Stadtteil</label>
+          <input type="text" name="district" />
+        </div>
+        <div class="field full">
+          <label>Straße &amp; Hausnummer</label>
+          <input type="text" name="street" />
+        </div>
+        <div class="field full">
+          <label>Adress-Sichtbarkeit</label>
+          <select name="address_visibility">
+            <option value="on_request">Adresse auf Anfrage (empfohlen)</option>
+            <option value="public">Vollständig öffentlich</option>
+            <option value="hidden">Nur Stadt anzeigen</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Beschreibung & Ausstattung -->
+    <section class="form-section">
+      <h3>Beschreibung &amp; Ausstattung</h3>
+      <div class="form-grid">
+        <div class="field full">
+          <label>Beschreibung *</label>
+          <textarea name="description" rows="8" required placeholder="Beschreibe Lage, Zimmeraufteilung, Besonderheiten…"></textarea>
+        </div>
+        <div class="field full">
+          <label>Ausstattung</label>
+          <div class="checkbox-list" id="lf-features" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px"></div>
+        </div>
+
+        <div class="field">
+          <label>Energieklasse</label>
+          <select name="energy_class">
+            <option value="">–</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Energiekennwert (kWh/m²·a)</label>
+          <input type="number" name="energy_value" min="0" step="0.1" />
+        </div>
+        <div class="field">
+          <label>Energieträger</label>
+          <input type="text" name="energy_carrier" placeholder="z. B. Gas, Fernwärme" />
+        </div>
+        <div class="field">
+          <label>Energieausweis vorhanden</label>
+          <select name="energy_certificate">
+            <option value="false">Nein</option>
+            <option value="true">Ja</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Fotos -->
+    <section class="form-section">
+      <h3>Fotos</h3>
+      <p class="muted" style="margin-top:-10px">Lade bis zu 12 Fotos hoch (JPG / PNG / WebP, max. 5 MB pro Bild). Das erste Foto wird als Titelbild verwendet.</p>
+      <div class="field full">
+        <input type="file" id="lf-files" multiple accept="image/jpeg,image/png,image/webp" />
+      </div>
+      <div id="lf-preview" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"></div>
+    </section>
+
+    <!-- 5. Rechtliches -->
+    <section class="form-section">
+      <h3>Veröffentlichen</h3>
+      <label style="display:flex;gap:10px;font-size:.92rem;margin-bottom:14px">
+        <input type="checkbox" name="terms_ok" required />
+        <span>Ich akzeptiere die <a href="agb.html">AGB</a> und die <a href="datenschutz.html">Datenschutzerklärung</a>.</span>
+      </label>
+      <label style="display:flex;gap:10px;font-size:.92rem;margin-bottom:20px">
+        <input type="checkbox" name="rights_ok" required />
+        <span>Ich habe die Rechte an den hochgeladenen Bildern und versichere, dass alle Angaben wahr sind.</span>
+      </label>
+
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Inserat veröffentlichen</button>
+    </section>
+  </form>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border:0;padding:0">
+      <span>© 2026 immodays</span>
+      <span><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="agb.html">AGB</a></span>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/inserieren.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Suche – immodays</title>
+  <meta name="description" content="Immobilien finden auf immodays. Filter nach Preis, Wohnfläche, Zimmerzahl, Ausstattung." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='16' height='32' fill='%23c9a24b'/><rect x='16' width='16' height='32' fill='%230b1f4d'/></svg>" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo logo--sm"><span class="logo-immo">immo</span><span class="logo-days">days</span></a>
+    <div class="nav-links">
+      <a href="suchen.html?listing_type=rent" class="is-active">Mieten</a>
+      <a href="suchen.html?listing_type=buy">Kaufen</a>
+      <a href="inserieren.html">Inserieren</a>
+    </div>
+    <div class="nav-actions">
+      <a href="anmelden.html" class="btn btn-ghost btn-sm" data-auth="logged-out">Anmelden</a>
+      <a href="registrieren.html" class="btn btn-primary btn-sm" data-auth="logged-out">Registrieren</a>
+      <a href="konto.html" class="btn btn-ghost btn-sm" data-auth="logged-in" style="display:none">Mein Konto</a>
+      <a href="#" class="btn btn-primary btn-sm" data-auth="logged-in" data-action="signout" style="display:none">Logout</a>
+    </div>
+    <button class="nav-burger" aria-label="Menü"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+</nav>
+
+<main class="container search-page-wrap">
+  <div class="results-head">
+    <div>
+      <span class="eyebrow" id="results-eyebrow">Aktuelle Suche</span>
+      <h1 class="results-count"><b id="results-count">…</b> Inserate gefunden</h1>
+    </div>
+    <div class="field" style="max-width:220px">
+      <select id="sort-select">
+        <option value="created_at.desc">Neueste zuerst</option>
+        <option value="price.asc">Preis aufsteigend</option>
+        <option value="price.desc">Preis absteigend</option>
+        <option value="living_area.desc">Größte Wohnfläche</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="results-layout">
+    <!-- ========== Filter ========== -->
+    <aside class="filters" aria-label="Filter">
+      <form id="filter-form">
+        <div class="filter-group">
+          <h4>Land &amp; Ort</h4>
+          <div class="field" style="margin-bottom:10px">
+            <select name="country" id="f-country"></select>
+          </div>
+          <div class="field">
+            <input type="text" name="q" id="f-q" placeholder="Stadt, PLZ, Region" />
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Vertrag</h4>
+          <div class="search-tabs" style="width:100%">
+            <button type="button" class="search-tab is-active" data-listing="rent" style="flex:1">Mieten</button>
+            <button type="button" class="search-tab" data-listing="buy" style="flex:1">Kaufen</button>
+          </div>
+          <input type="hidden" name="listing_type" id="f-listing" value="rent" />
+        </div>
+
+        <div class="filter-group">
+          <h4>Objektart</h4>
+          <div class="checkbox-list">
+            <label><input type="checkbox" name="property_type" value="apartment" /> Wohnung</label>
+            <label><input type="checkbox" name="property_type" value="house" /> Haus</label>
+            <label><input type="checkbox" name="property_type" value="land" /> Grundstück</label>
+            <label><input type="checkbox" name="property_type" value="commercial" /> Gewerbe</label>
+            <label><input type="checkbox" name="property_type" value="room" /> Zimmer / WG</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Preis</h4>
+          <div class="filter-row">
+            <div class="field"><label>Min</label><input type="number" name="price_min" min="0" step="50" /></div>
+            <div class="field"><label>Max</label><input type="number" name="price_max" min="0" step="50" /></div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Wohnfläche (m²)</h4>
+          <div class="filter-row">
+            <div class="field"><label>Min</label><input type="number" name="area_min" min="0" /></div>
+            <div class="field"><label>Max</label><input type="number" name="area_max" min="0" /></div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Zimmer</h4>
+          <div class="filter-row">
+            <div class="field"><label>Min</label><input type="number" name="rooms_min" min="0" step=".5" /></div>
+            <div class="field"><label>Max</label><input type="number" name="rooms_max" min="0" step=".5" /></div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Ausstattung</h4>
+          <div class="checkbox-list" id="f-features">
+            <!-- via JS gefüllt -->
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Quelle</h4>
+          <div class="checkbox-list">
+            <label><input type="checkbox" name="source" value="immodays" checked /> immodays-Inserate</label>
+            <label><input type="checkbox" name="source" value="external" /> Andere Portale (gesammelt)</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Filter anwenden</button>
+        <button type="reset" class="btn btn-link btn-block" style="margin-top:8px">Alle Filter zurücksetzen</button>
+      </form>
+    </aside>
+
+    <!-- ========== Cards ========== -->
+    <section>
+      <div class="cards-grid" id="results-grid">
+        <div class="card"><div class="skeleton" style="aspect-ratio:4/3"></div><div class="card-body"><div class="skeleton" style="height:24px;width:60%;margin-bottom:8px"></div><div class="skeleton" style="height:16px;width:80%"></div></div></div>
+        <div class="card"><div class="skeleton" style="aspect-ratio:4/3"></div><div class="card-body"><div class="skeleton" style="height:24px;width:60%;margin-bottom:8px"></div><div class="skeleton" style="height:16px;width:80%"></div></div></div>
+        <div class="card"><div class="skeleton" style="aspect-ratio:4/3"></div><div class="card-body"><div class="skeleton" style="height:24px;width:60%;margin-bottom:8px"></div><div class="skeleton" style="height:16px;width:80%"></div></div></div>
+      </div>
+      <div id="pagination" style="display:flex;justify-content:center;gap:8px;margin-top:48px"></div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border:0;padding:0">
+      <span>© 2026 immodays</span>
+      <span>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="agb.html">AGB</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/search.js"></script>
+
+</body>
+</html>

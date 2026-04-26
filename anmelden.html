@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anmelden – immodays</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='16' height='32' fill='%23c9a24b'/><rect x='16' width='16' height='32' fill='%230b1f4d'/></svg>" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo logo--sm"><span class="logo-immo">immo</span><span class="logo-days">days</span></a>
+    <div class="nav-links"></div>
+    <div class="nav-actions">
+      <a href="registrieren.html" class="btn btn-ghost btn-sm">Konto erstellen</a>
+    </div>
+  </div>
+</nav>
+
+<div class="auth-wrap">
+  <aside class="auth-aside">
+    <a href="index.html" class="logo logo--sm" style="background:transparent">
+      <span class="logo-immo">immo</span><span class="logo-days">days</span>
+    </a>
+    <div>
+      <h2 style="font-style:italic;font-weight:400">Willkommen zurück.</h2>
+      <p class="quote" style="margin-top:30px">„Wer sucht, der findet — auf immodays sogar drei Portale gleichzeitig."</p>
+    </div>
+    <p style="font-size:.85rem;color:rgba(255,255,255,.65)">© 2026 immodays</p>
+  </aside>
+
+  <div class="auth-form-wrap">
+    <form class="auth-form" id="login-form">
+      <h1>Anmelden</h1>
+      <p class="muted">Wieder da? Schön.</p>
+
+      <div id="auth-msg" style="margin:18px 0"></div>
+
+      <div class="field" style="margin-bottom:14px">
+        <label>E-Mail</label>
+        <input type="email" name="email" required autocomplete="email" />
+      </div>
+      <div class="field" style="margin-bottom:18px">
+        <label>Passwort</label>
+        <input type="password" name="password" required autocomplete="current-password" />
+      </div>
+      <button class="btn btn-primary btn-block btn-lg" type="submit">Anmelden</button>
+
+      <div class="switch">
+        Noch kein Konto? <a href="registrieren.html">Jetzt registrieren →</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+  import { supabase } from './js/supabase.js';
+  import { escapeHtml, getQuery } from './js/main.js';
+
+  document.getElementById('login-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const msg = document.getElementById('auth-msg');
+    msg.innerHTML = '';
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email:    fd.get('email'),
+      password: fd.get('password'),
+    });
+
+    if (error) {
+      msg.innerHTML = `<div class="alert alert-error">${escapeHtml(error.message)}</div>`;
+      return;
+    }
+    const next = getQuery().next;
+    window.location.href = next ? decodeURIComponent(next) : 'konto.html';
+  });
+</script>
+
+</body>
+</html>
